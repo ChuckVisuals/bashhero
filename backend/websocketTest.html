@@ -35,6 +35,10 @@
         console.error("WebSocket error:", error);
       };
 
+      socket.onopen = () => {
+        console.log("WebSocket connection established");
+      };
+
       // Handle connection close
       socket.onclose = () => {
         console.log("WebSocket connection closed");
