@@ -24,8 +24,9 @@ async def handle_terminal(websocket):
     async def write_to_process():
         # Receive input from the client and send it to the shell
         async for message in websocket:
-            process.stdin.write(message)
-            process.stdin.flush()
+            if message.strip():  # Ensure the message is not empty
+                process.stdin.write(message + '\n')  # Add a newline if missing
+                process.stdin.flush()
 
     # Run the read and write tasks concurrently
     await asyncio.gather(read_from_process(), write_to_process())

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebSocket Test</title>
+  </head>
+  <body>
+    <h1>WebSocket Terminal</h1>
+    <textarea id="output" rows="20" cols="80" readonly></textarea><br />
+    <input
+      id="input"
+      type="text"
+      placeholder="Type a command"
+      style="width: 80%"
+    />
+    <button id="send">Send</button>
+
+    <script>
+      const output = document.getElementById("output");
+      const input = document.getElementById("input");
+      const sendButton = document.getElementById("send");
+
+      // Connect to the WebSocket server
+      const socket = new WebSocket("ws://localhost:8080");
+
+      // Handle incoming messages
+      socket.onmessage = (event) => {
+        output.value += event.data + "\n";
+        output.scrollTop = output.scrollHeight; // Auto-scroll to the bottom
+      };
+
+      // Handle errors
+      socket.onerror = (error) => {
+        console.error("WebSocket error:", error);
+      };
+
+      // Handle connection close
+      socket.onclose = () => {
+        console.log("WebSocket connection closed");
+      };
+
+      // Send input to the server when the button is clicked
+      sendButton.addEventListener("click", () => {
+        const command = input.value;
+        if (command) {
+          socket.send(command + "\n"); // Send the command to the server
+          input.value = ""; // Clear the input field
+        }
+      });
+
+      // Allow pressing Enter to send the command
+      input.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") {
+          sendButton.click();
+        }
+      });
+    </script>
+  </body>
+</html>
