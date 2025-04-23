@@ -7,38 +7,55 @@ import "@xterm/xterm/css/xterm.css";
 export default function Playground() {
 
     useEffect(() => {
-        const term = new Terminal();
-        const terminalElement = document.getElementById('terminal');
+        const term = new Terminal({
+            cursorBlink: true,
+            rows: 24,
+            cols: 80,
+        });
+
+        const terminalElement = document.getElementById("terminal");
         if (terminalElement) {
             term.open(terminalElement);
-            let currentLine = "";
 
-            // Enable typing in the terminal
+            // Establish WebSocket connection
+            const socket = new WebSocket("ws://localhost:8080");
+
+            // Handle incoming data from the WebSocket server
+            socket.onmessage = (event) => {
+                term.write(event.data);
+            };
+
+            // Handle terminal input and send it to the WebSocket server
             term.onData((data) => {
-                if (data === "\x7F") {
-                    // Handle backspace
-                    if (currentLine.length > 0) {
-                        currentLine = currentLine.slice(0, -1); // Remove the last character
-                        term.write("\b \b"); // Move cursor back, overwrite with space, and move back again
-                    }
-                } else if (data === "\r") {
-                    // Handle Enter key
-                    term.write("\r\n"); // Move to the next line
-                    currentLine = ""; // Clear the current line
-                    term.write('$ '); // Add a new prompt
-                } else {
-                    currentLine += data; // Add the input to the current line
-                    term.write(data); // Echo the input
-                }
+                socket.send(data);
             });
-            term.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
+
+            // Handle WebSocket errors
+            socket.onerror = (error) => {
+                console.error("WebSocket error:", error);
+                term.write("\r\nWebSocket error occurred.\r\n");
+            };
+
+            // Handle WebSocket close
+            socket.onclose = () => {
+                term.write("\r\nConnection to server closed.\r\n");
+            };
+
+            // Initial message in the terminal
+            term.write("Connecting to server...\r\n");
         } else {
             console.error("Terminal element not found");
         }
+
+        // Cleanup on component unmount
+        return () => {
+            term.dispose();
+        };
+
     }, []);
 
     return (
-        <div className="flex flex-col bg-slate-800 border-2 item-center justify-center">
+        <div className="flex flex-col bg-slate-800 border-2 round-lg item-center justify-center">
             <div>
                 Bash Hero
             </div>

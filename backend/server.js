@@ -1,4 +1,5 @@
 const WebSocket = require("ws");
+const pty = require("node-pty");
 const { spawn } = require("child_process");
 
 // Create a WebSocket server
@@ -9,37 +10,34 @@ const wss = new WebSocket.Server({ port: 8080 }, () => {
 wss.on("connection", (ws) => {
   console.log("Client connected");
 
-  const shell = spawn("docker", [
-    "run",
-    "-i", // Interactive mode
-    "--rm", // Automatically remove the container when it exits
-    "ubuntu", // Replace "ubuntu" with your desired Docker image
-    "bash", // Start a bash shell
-  ]);
+  const shell = pty.spawn(
+    "docker",
+    [
+      "run",
+      "-it",
+      "--rm", // Automatically remove the container when it exits
+      "testing", // Replace "ubuntu" with your desired Docker image
+      "bash", // Start a bash shell
+    ],
+    {
+      name: "xterm-color",
+      cols: 80,
+      rows: 24,
+      cwd: "/",
+    }
+  );
 
-  // Handle output from the shell process
-  shell.stdout.on("data", (data) => {
+  // Handle output from the Docker container
+  shell.on("data", (data) => {
     console.log(`Shell output: ${data}`);
-    ws.send(data.toString());
-  });
-
-  shell.stderr.on("data", (data) => {
-    console.error(`Shell error: ${data}`);
-    ws.send(data.toString());
-  });
-
-  shell.on("close", (code) => {
-    console.log(`Shell process exited with code ${code}`);
-    ws.close();
+    ws.send(data);
   });
 
   // Handle messages from the WebSocket client
   ws.on("message", (message) => {
     const messageStr = message.toString(); // Convert Buffer to string
     console.log(`Received message: ${messageStr}`);
-    if (messageStr.trim()) {
-      shell.stdin.write(messageStr + "\n");
-    }
+    shell.write(messageStr); // Write directly to the pseudo-TTY
   });
 
   // Handle WebSocket close
