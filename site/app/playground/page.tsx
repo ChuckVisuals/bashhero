@@ -2,6 +2,13 @@ import BashTerminal from "@/components/Terminal";
 
 export default function Playground() {
 
+    const preConfig = {
+        PreProccessCmds: ["mkdir test", "cd test", "touch hello.txt", "cd ..", "clear"],
+        testCases: [],
+        testCasesResults: [],
+        restrictedCommands: ["cd", "shutdown", "reboot"]
+    }
+
     return (
         <div className="">
             <div className="flex flex-row bg-slate-800 border rounded-lg round-lg p-4 m-4 justify-between">
@@ -11,7 +18,7 @@ export default function Playground() {
                 </div>
                 <div className="">
                     Bash Hero
-                    <BashTerminal />
+                    <BashTerminal preConfig={preConfig} />
                 </div>
             </div>
             <div>
