@@ -17,9 +17,9 @@ export default function BashTerminal({ preConfig }: any) {
             term.open(terminalElement);
 
             // Establish WebSocket connection
-            // ws://142.93.74.159:8080
-            // ws://localhost:8080
-            const socket = new WebSocket("ws://142.93.74.159:8080");
+            // wss://142.93.74.159:8080
+            // wss://localhost:8080
+            const socket = new WebSocket("wss://142.93.74.159:8080");
 
             // Handle incoming data from the WebSocket server
             socket.onmessage = (event) => {
