@@ -8,8 +8,11 @@ export default function BashTerminal({ preConfig }: any) {
     useEffect(() => {
         const term = new Terminal({
             cursorBlink: true,
-            rows: 24,
+            rows: 33,
             cols: 80,
+            theme: {
+                background: "#262626"
+            }
         });
 
         const terminalElement = document.getElementById("terminal");
@@ -32,6 +35,7 @@ export default function BashTerminal({ preConfig }: any) {
                     const badCommandFound = preConfig.restrictedCommands.some((cmd: string) => lastLine.includes(cmd));
                     if (badCommandFound) {
                         term.write("\r\nCommand not allowed.");
+                        console.log("Command not allowed:", lastLine);
                     }
                 }
                 socket.send(data);
