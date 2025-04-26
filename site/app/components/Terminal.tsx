@@ -1,6 +1,6 @@
 "use client";
 import { Terminal } from "@xterm/xterm";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "@xterm/xterm/css/xterm.css";
 
 export default function BashTerminal({ preConfig }: any) {
@@ -8,7 +8,7 @@ export default function BashTerminal({ preConfig }: any) {
     useEffect(() => {
         const term = new Terminal({
             cursorBlink: true,
-            rows: 24,
+            rows: 34,
             cols: 80,
         });
 

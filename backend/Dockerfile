@@ -1,18 +1,13 @@
-# Builds a simple Ubuntu image with basic tools for BashHero problems
+FROM node:23.11.0
 
-FROM ubuntu:20.04
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
 
-RUN apt-get update && apt-get install -y \
-  nano \
-  vim \
-  bash
+# Need Docker CLI to run docker containers from server.js
+RUN apt-get update && apt-get install -y docker.io
 
-# Create a new user (e.g., "user") and set up the workspace
-RUN useradd -ms /bin/bash user
-
-# Switch to the new user
-USER user
-
-WORKDIR /workspace
-
-CMD ["/bin/bash"]
+# Exposes 8080 for web socket
+EXPOSE 8080
+CMD ["node", "server.js"]

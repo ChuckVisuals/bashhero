@@ -16,7 +16,7 @@ wss.on("connection", (ws) => {
       "run",
       "-it",
       "--rm", // Automatically remove the container when it exits
-      "testing", // Replace "ubuntu" with your desired Docker image
+      "chuckvisuals/linux", // Replace "ubuntu" with your desired Docker image
       "bash", // Start a bash shell
     ],
     {

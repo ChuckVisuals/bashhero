@@ -35,7 +35,6 @@ export default function Playground() {
             <div className="flex flex-row bg-slate-800 border rounded-lg round-lg p-4 mx-4 justify-between h-1/3">
                 <h1 className="text-2xl text-white">Test/Cases</h1>
             </div>
-
         </div>
 
     )
