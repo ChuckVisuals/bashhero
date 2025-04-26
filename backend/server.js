@@ -27,6 +27,14 @@ wss.on("connection", (ws) => {
     }
   );
 
+  // Send a ping every 30 seconds so terminal doesn't timeout in PROD
+  const interval = setInterval(() => {
+    if (ws.readyState === WebSocket.OPEN) {
+      ws.ping(); // Send a protocol-level ping
+      console.log("Ping sent to client");
+    }
+  }, 30000); // 30 seconds
+
   // Handle output from the Docker container
   shell.on("data", (data) => {
     console.log(`Shell output: ${data}`);
@@ -41,6 +49,9 @@ wss.on("connection", (ws) => {
   });
 
   // Handle WebSocket close
+  // Need to handle not to kill term if the user leaves the page
+  // or closes the tab
+  // This is a workaround to prevent the terminal from being killed
   ws.on("close", () => {
     console.log("Client disconnected");
     shell.kill();
@@ -49,6 +60,7 @@ wss.on("connection", (ws) => {
   // Handle WebSocket errors
   ws.on("error", (error) => {
     console.error(`WebSocket error: ${error}`);
+    clearInterval(interval);
     shell.kill();
   });
 });
