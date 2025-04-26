@@ -3,7 +3,7 @@ const pty = require("node-pty");
 const { spawn } = require("child_process");
 
 // Create a WebSocket server
-const wss = new WebSocket.Server({ port: 8080 }, () => {
+const wss = new WebSocket.Server( { host: '0.0.0.0', port: 8080 }, () => {
   console.log("WebSocket server is running on ws://localhost:8080");
 });
 
