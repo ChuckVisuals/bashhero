@@ -1,6 +1,6 @@
 "use client";
 import { Terminal } from "@xterm/xterm";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "@xterm/xterm/css/xterm.css";
 
 export default function BashTerminal({ preConfig }: any) {
@@ -20,7 +20,9 @@ export default function BashTerminal({ preConfig }: any) {
             term.open(terminalElement);
 
             // Establish WebSocket connection
-            const socket = new WebSocket("ws://localhost:8080");
+            // wss://bashheroserver.online
+            // ws://localhost:8080
+            const socket = new WebSocket("wss://bashheroserver.online");
 
             // Handle incoming data from the WebSocket server
             socket.onmessage = (event) => {
