@@ -1,28 +1,42 @@
 "use client";
 import { Terminal } from "@xterm/xterm";
-import { useEffect, useState } from "react";
+import { useEffect, useImperativeHandle, useRef, forwardRef } from "react";
 import "@xterm/xterm/css/xterm.css";
 
-export default function BashTerminal({ preConfig }: any) {
+export interface PreConfig {
+    id: string; // Unique identifier for each problem
+    PreProccessCmds: string[];
+    testCases: string[];
+    testCasesResults: string[];
+    restrictedCommands: string[];
+    description: string;
+    tags: string[];
+    difficulty: string;
+}
+
+const BashTerminal = forwardRef(({ preConfig, termSettings, terminalId }: { preConfig: PreConfig; termSettings: [number, number, boolean]; terminalId: string }, ref) => {
+    const containerName = `bashherotest-${preConfig.id}`;
+    const socketRef = useRef<WebSocket | null>(null);
 
     useEffect(() => {
         const term = new Terminal({
-            cursorBlink: true,
-            rows: 33,
-            cols: 80,
+            cursorBlink: termSettings[2],
+            rows: termSettings[0],
+            cols: termSettings[1],
             theme: {
                 background: "#262626"
             }
         });
 
-        const terminalElement = document.getElementById("terminal");
+        const terminalElement = document.getElementById(terminalId);
         if (terminalElement) {
             term.open(terminalElement);
 
             // Establish WebSocket connection
             // wss://bashheroserver.online
             // ws://localhost:8080
-            const socket = new WebSocket("wss://bashheroserver.online");
+            const socket = new WebSocket(`wss://bashheroserver.online?containerName=${encodeURIComponent(containerName)}`);
+            socketRef.current = socket;
 
             // Handle incoming data from the WebSocket server
             socket.onmessage = (event) => {
@@ -40,7 +54,12 @@ export default function BashTerminal({ preConfig }: any) {
                         console.log("Command not allowed:", lastLine);
                     }
                 }
-                socket.send(data);
+                if (terminalId == "terminal-bashing") {
+                    socket.send(data);
+                }
+                else {
+                    return;
+                }
             });
 
             // Handle WebSocket errors
@@ -79,8 +98,30 @@ export default function BashTerminal({ preConfig }: any) {
         // Cleanup on component unmount
         return () => {
             term.dispose();
+            if (socketRef.current) {
+                socketRef.current.close();
+            }
         };
     }, []);
 
-    return (<div id="terminal" className=""></div>)
-}
+    // Expose a method to run commands via ref
+    useImperativeHandle(ref, () => ({
+        runCommands: (commands: string[]) => {
+            if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+                commands.forEach((cmd) => {
+                    if (cmd == "clear") {
+                        socketRef.current?.send(`${cmd}\n`);
+                    } else {
+                        socketRef.current?.send(`${cmd}\n`);
+                    }
+                });
+            } else {
+                console.error("WebSocket is not open. Cannot send commands.");
+            }
+        }
+    }));
+
+    return (<div id={terminalId} className=""></div>);
+});
+
+export default BashTerminal;

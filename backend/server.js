@@ -1,31 +1,54 @@
 const WebSocket = require("ws");
 const pty = require("node-pty");
+const { execSync } = require("child_process");
 const { spawn } = require("child_process");
+const url = require("url");
 
 // Create a WebSocket server
 const wss = new WebSocket.Server( { host: '0.0.0.0', port: 8080 }, () => {
   console.log("WebSocket server is running on ws://localhost:8080");
 });
 
-wss.on("connection", (ws) => {
+wss.on("connection", (ws, req) => {
   console.log("Client connected");
 
-  const shell = pty.spawn(
-    "docker",
-    [
-      "run",
-      "-it",
-      "--rm", // Automatically remove the container when it exits
-      "chuckvisuals/linux", // Replace "ubuntu" with your desired Docker image
-      "bash", // Start a bash shell
-    ],
-    {
-      name: "xterm-color",
-      cols: 80,
-      rows: 24,
-      cwd: "/",
+  // Extract the container name from the WebSocket URL
+  const query = url.parse(req.url, true).query;
+  const containerName = query.containerName || "default_container"; // Default if not provided
+  console.log(`Using container name: ${containerName}`);
+
+  let shell;
+
+  // Check if the container already exists and is running
+  try {
+    const existingContainer = execSync(`docker ps -q -f name=${containerName}`).toString().trim();
+
+    if (existingContainer) {
+      console.log(`Reconnecting to existing container: ${containerName}`);
+      // Attach to the existing container
+      shell = pty.spawn("docker", ["exec", "-it", containerName, "bash"], {
+        name: "xterm-color",
+        cols: 80,
+        rows: 24,
+        cwd: "/",
+      });
+    } else {
+      console.log(`Starting a new container: ${containerName}`);
+      // Start a new container if it doesn't exist
+      execSync(`docker run -it -d --name ${containerName} chuckvisuals/linux bash`);
+      shell = pty.spawn("docker", ["exec", "-it", containerName, "bash"], {
+        name: "xterm-color",
+        cols: 80,
+        rows: 24,
+        cwd: "/",
+      });
+
+      // Track the container creation time
+      containerCreationTimes.set(containerName, Date.now());
     }
-  );
+  } catch (error) {
+    console.error("Error managing container:", error);
+  }
 
   // Send a ping every 30 seconds so terminal doesn't timeout in PROD
   const interval = setInterval(() => {
@@ -49,9 +72,6 @@ wss.on("connection", (ws) => {
   });
 
   // Handle WebSocket close
-  // Need to handle not to kill term if the user leaves the page
-  // or closes the tab
-  // This is a workaround to prevent the terminal from being killed
   ws.on("close", () => {
     console.log("Client disconnected");
     shell.kill();
@@ -64,3 +84,39 @@ wss.on("connection", (ws) => {
     shell.kill();
   });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////// Safely Checks ///////////////////////////////////////////////
+// Map to track container creation times
+const containerCreationTimes = new Map();
+
+// Function to check and kill expired containers
+function checkAndKillExpiredContainers() {
+  const now = Date.now();
+  for (const [containerName, creationTime] of containerCreationTimes.entries()) {
+    const elapsedTime = now - creationTime;
+    if (elapsedTime > 24 * 60 * 60 * 1000) { // 24 hours in milliseconds
+      console.log(`Killing container ${containerName} (exceeded 24 hours)`);
+      try {
+        execSync(`docker rm -f ${containerName}`);
+        containerCreationTimes.delete(containerName); // Remove from the map
+      } catch (error) {
+        console.error(`Failed to kill container ${containerName}:`, error.message);
+      }
+    }
+  }
+}
+
+// Periodically check for expired containers every hour
+setInterval(checkAndKillExpiredContainers, 60 * 60 * 1000); // 1 hour in milliseconds
