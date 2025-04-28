@@ -19,36 +19,44 @@ wss.on("connection", (ws, req) => {
 
   let shell;
 
-  // Check if the container already exists and is running
-  try {
-    const existingContainer = execSync(`docker ps -q -f name=${containerName}`).toString().trim();
+  // Check if the container already exists (running or stopped)
+try {
+  const existingContainer = execSync(`docker ps -aq -f name=${containerName}`).toString().trim();
 
-    if (existingContainer) {
-      console.log(`Reconnecting to existing container: ${containerName}`);
-      // Attach to the existing container
-      shell = pty.spawn("docker", ["exec", "-it", containerName, "bash"], {
-        name: "xterm-color",
-        cols: 80,
-        rows: 24,
-        cwd: "/",
-      });
-    } else {
-      console.log(`Starting a new container: ${containerName}`);
-      // Start a new container if it doesn't exist
-      execSync(`docker run -it -d --name ${containerName} chuckvisuals/linux bash`);
-      shell = pty.spawn("docker", ["exec", "-it", containerName, "bash"], {
-        name: "xterm-color",
-        cols: 80,
-        rows: 24,
-        cwd: "/",
-      });
+  if (existingContainer) {
+    console.log(`Reconnecting to existing container: ${containerName}`);
+    // Check if the container is stopped
+    const isRunning = execSync(`docker inspect -f '{{.State.Running}}' ${containerName}`).toString().trim();
 
-      // Track the container creation time
-      containerCreationTimes.set(containerName, Date.now());
+    if (isRunning === "false") {
+      console.log(`Starting stopped container: ${containerName}`);
+      execSync(`docker start ${containerName}`);
     }
-  } catch (error) {
-    console.error("Error managing container:", error);
+
+    // Attach to the existing container
+    shell = pty.spawn("docker", ["exec", "-it", containerName, "bash"], {
+      name: "xterm-color",
+      cols: 80,
+      rows: 24,
+      cwd: "/",
+    });
+  } else {
+    console.log(`Starting a new container: ${containerName}`);
+    // Start a new container if it doesn't exist
+    execSync(`docker run -it -d --name ${containerName} chuckvisuals/linux bash`);
+    shell = pty.spawn("docker", ["exec", "-it", containerName, "bash"], {
+      name: "xterm-color",
+      cols: 80,
+      rows: 24,
+      cwd: "/",
+    });
+
+    // Track the container creation time
+    containerCreationTimes.set(containerName, Date.now());
   }
+} catch (error) {
+  console.error("Error managing container:", error.message);
+}
 
   // Send a ping every 30 seconds so terminal doesn't timeout in PROD
   const interval = setInterval(() => {
