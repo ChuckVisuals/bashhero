@@ -1,6 +1,7 @@
 "use client";
 import { Terminal } from "@xterm/xterm";
 import { useEffect, useImperativeHandle, useRef, forwardRef } from "react";
+import { Difficulty } from "@/problems/problemData";
 import "@xterm/xterm/css/xterm.css";
 
 export interface PreConfig {
@@ -11,7 +12,7 @@ export interface PreConfig {
     restrictedCommands: string[];
     description: string;
     tags: string[];
-    difficulty: string;
+    difficulty: Difficulty;
 }
 
 const BashTerminal = forwardRef(({ preConfig, termSettings, terminalId }: { preConfig: PreConfig; termSettings: [number, number, boolean]; terminalId: string }, ref) => {

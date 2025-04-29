@@ -29,12 +29,12 @@ const ProblemPage = () => {
         }
     };
 
-    // If the problem is found, render its details
+    // If the problem is found, render its details with terminals
     return (
         <div className="h-screen flex flex-col gap-4 mt-4">
             <div className="flex flex-row gap-x-20 bg-neutral-900 border border-neutral-600 rounded-lg round-lg p-4 mx-4 justify-between h-2/3">
                 <div className="w-1/2">
-                    <h1 className="text-2xl text-white">Description</h1>
+                    <h1 className="text-2xl text-white">{problem.name}</h1>
                     <div className="prose prose-stone prose max-w-5xl prose-invert p-8 mt-4 border border-neutral-600 rounded-lg bg-neutral-800 max-h-9/10 overflow-y-auto">
                         <ReactMarkdown>{dedent(problem.description)}</ReactMarkdown>
                     </div>
