@@ -1,14 +1,13 @@
-# Steps to Run the Project
+# Steps to Run the Project Locally 
 
 ## 1. Install Node Packages
 ```bash
 npm install
 ```
 
-## 2. Build the Docker Image
-Run the Dockerfile with the specified container name:
+## 2. Build the Linux Image 
 ```bash
-docker build -t testing .
+docker build -f Dockerfile.linux -t chuckvisuals/testing:latest .
 ```
 
 ## 3. Start the Server
@@ -32,7 +31,7 @@ docker push chuckvisuals/testing:latest
 ```
 ---
 
-## Push Updated Docker Image (Linux)
+## Push Updated Docker Image (Server)
 If Backend Code is updated, run these commands to push the new image to Docker Hub:
 
 ### Build the Image
