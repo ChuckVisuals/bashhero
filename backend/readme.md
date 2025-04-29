@@ -32,7 +32,7 @@ docker push chuckvisuals/testing:latest
 ```
 ---
 
-## Push Updated Docker Image (Linux)
+## Push Updated Backend
 If Backend Code is updated, run these commands to push the new image to Docker Hub:
 
 ### Build the Image
