@@ -28,8 +28,10 @@ export const problems: PreConfig[] = [
             "clear",
             "mkdir alpha",
             "cd alpha",
+            "touch dummy1.txt",
             "mkdir beta",
             "cd beta",
+            "touch log.txt",
             "mkdir gamma",
             "cd gamma",
             "touch hidden_message.txt",
@@ -156,4 +158,5 @@ export const problems: PreConfig[] = [
         tags: ["bash", "file-management"],
         difficulty: Difficulty.Beginner
     }
+    
 ];
