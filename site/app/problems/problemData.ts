@@ -1,17 +1,25 @@
+export enum Difficulty {
+    Beginner,
+    Intermediate,
+    Advanced,
+}
+
 export interface PreConfig {
     id: string; // Unique identifier for each problem
+    name: string; // Name of the problem
     PreProccessCmds: string[];
     testCases: string[];
     testCasesResults: string[];
     restrictedCommands: string[];
     description: string;
     tags: string[];
-    difficulty: string;
+    difficulty: Difficulty; // Use the Difficulty enum here
 }
 
 export const problems: PreConfig[] = [
     {
         id: "welcome",
+        name: "🧠 BashHero Challenge: Secret Agent: Hidden Message",
         PreProccessCmds: [
             "mkdir test",
             "cd test",
@@ -20,8 +28,10 @@ export const problems: PreConfig[] = [
             "clear",
             "mkdir alpha",
             "cd alpha",
+            "touch dummy1.txt",
             "mkdir beta",
             "cd beta",
+            "touch log.txt",
             "mkdir gamma",
             "cd gamma",
             "touch hidden_message.txt",
@@ -34,7 +44,6 @@ export const problems: PreConfig[] = [
         testCasesResults: [],
         restrictedCommands: ["shutdown", "reboot"],
         description: `
-            ## 🧠 BashHero Challenge: "Secret Agent: Hidden Message"
             ### 📝 Description:
             You've been hired as a secret agent trainee. Somewhere in a nested directory structure, a \`.txt\` file contains a hidden keyword: \`TOPSECRET\`. Your mission is to find that file and reveal the message.
 
@@ -88,10 +97,11 @@ export const problems: PreConfig[] = [
             cat ./alpha/beta/gamma/hidden_message.txt
             \`\`\``,
         tags: ["bash", "grep", "find"],
-        difficulty: "Intermediate"
+        difficulty: Difficulty.Intermediate
     },
     {
         id: "file-cleanup",
+        name: "🧹 BashHero Challenge: File Cleanup",
         PreProccessCmds: [
             "mkdir cleanup",
             "cd cleanup",
@@ -111,7 +121,6 @@ export const problems: PreConfig[] = [
         ],
         restrictedCommands: ["rm -rf /"],
         description: `
-            ## 🧹 BashHero Challenge: "File Cleanup"
             ### 📝 Description:
             Your task is to clean up a directory by organizing files into appropriate folders.
 
@@ -147,6 +156,7 @@ export const problems: PreConfig[] = [
             rm *.tmp
             \`\`\``,
         tags: ["bash", "file-management"],
-        difficulty: "Beginner"
+        difficulty: Difficulty.Beginner
     }
+    
 ];
