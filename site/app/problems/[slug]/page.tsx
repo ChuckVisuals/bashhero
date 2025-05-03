@@ -60,10 +60,10 @@ const ProblemPage = () => {
         return null; // Render nothing until dimensions are available
     }
 
-    var term1Height = Math.floor(windowSize.height * 0.030704);
-    var term1Width = Math.floor(windowSize.width * 0.040479);
+    var term1Height = Math.floor(windowSize.height * 0.028704);
+    var term1Width = Math.floor(windowSize.width * 0.049479);
 
-    var term2Height = Math.floor(windowSize.height * 0.012611);
+    var term2Height = Math.floor(windowSize.height * 0.011111);
     var term2Width = Math.floor(windowSize.width * 0.10);
 
 
@@ -77,7 +77,7 @@ const ProblemPage = () => {
                         <ReactMarkdown>{dedent(problem.description)}</ReactMarkdown>
                     </div>
                 </div>
-                <div className="w-1/2 flex flex-col gap-4">
+                <div className="w-1/2 flex flex-col gap-4 justify-center">
                     <h1 className="text-2xl text-white">Bash Hero</h1>
                     <div className="border border-neutral-600 rounded-lg p-1">
                         <BashTerminal preConfig={problem} termSettings={[term1Height, term1Width, true]} terminalId="terminal-bashing" />
