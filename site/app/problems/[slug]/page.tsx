@@ -1,5 +1,7 @@
 "use client";
 import { useParams } from 'next/navigation';
+import Image from 'next/image';
+import Link from 'next/link';
 import BashTerminal from "@/components/Terminal";
 import { problems } from "@/problems/problemData";
 import ReactMarkdown from "react-markdown";
@@ -9,6 +11,9 @@ import { useRef, useState, useEffect } from "react";
 const ProblemPage = () => {
     const { slug } = useParams();
     const terminalRef = useRef<{ runCommands: (commands: string[]) => void } | null>(null);
+    const [PassFail, setPassFail] = useState<boolean>(false);
+
+    console.log("PassFail:", PassFail);
 
     // State to store window dimensions
     const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
@@ -92,8 +97,31 @@ const ProblemPage = () => {
                         Run Tests
                     </button>
                 </div>
-                <BashTerminal ref={terminalRef} preConfig={problem} termSettings={[term2Height, term2Width, false]} terminalId="terminal-testing" />
+                <BashTerminal ref={terminalRef} preConfig={problem} termSettings={[term2Height, term2Width, false]} terminalId="terminal-testing" onOutput={setPassFail} />
             </div>
+
+            {PassFail && (
+                <div className="flex items-center justify-center h-screen w-screen fixed top-0 left-0 place-items-center backdrop-blur-sm bg-black/20 z-20">
+                    <div className=" bg-neutral-900 border border-neutral-600/50 rounded-3xl p-8">
+                        <div className="flex flex-row gap-x-5 items-center justify-center">
+                            <Image src="/checkmark.svg" alt="check" width={150} height={150} className='invert opacity-70'></Image>
+                            <div className="text-6xl text-white/70">
+                                All test cases passed!
+                            </div>
+                        </div>
+                        <div className="flex flex-row gap-x-5 items-center justify-center mt-5">
+                            <Link href="/problems" className="flex flex-row  items-center gap-x-4 text-xl border border-neutral-600 bg-neutral-800 text-white rounded-lg px-4 py-2 hover:bg-neutral-700 hover:cursor-pointer duration-800" onClick={() => { }}>
+                                <Image src="/map.svg" alt="check" width={50} height={50} className='invert opacity-70'></Image>
+                                Explore More Problems
+                            </Link>
+                            <a href={`/problems/${slug}`} className="flex flex-row  items-center gap-x-4 text-xl border border-neutral-600 bg-neutral-800 text-white rounded-lg px-4 py-2 hover:bg-neutral-700 hover:cursor-pointer duration-800" onClick={() => { }}>
+                                <Image src="/restart.svg" alt="check" width={50} height={50} className='invert text-white opacity-70'></Image>
+                                Restart
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
 
     )

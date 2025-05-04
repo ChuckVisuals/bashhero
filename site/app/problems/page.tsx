@@ -6,9 +6,9 @@ export default function ProblemsPage() {
         <div className="flex flex-col gap-8 p-4 my-25 mx-6 sm:p-8 bg-neutral-900 border border-neutral-600/40 rounded-2xl">
             <h1 className="flex text-5xl text-neutral-200 font-bold justify-center">Explore</h1>
 
-            <div className="flex flex-col mx-10 gap-y-14">
+            <div className="flex flex-col mx-10 gap-y-7">
 
-                <div className="relative flex flex-col gap-10">
+                <div className="relative flex flex-col gap-4">
                     <div className="ml-5 text-3xl font-bold text-center sm:text-left text-green-300">
                         Beginner
                     </div>
@@ -38,7 +38,7 @@ export default function ProblemsPage() {
 
                 <div className="border border-neutral-600/30 rounded-lg"></div>
 
-                <div className="relative flex flex-col gap-10">
+                <div className="relative flex flex-col gap-4">
                     <div className="ml-5 text-3xl font-bold text-center sm:text-left text-orange-300">
                         Intermediate
                     </div>
@@ -68,7 +68,7 @@ export default function ProblemsPage() {
 
                 <div className="border border-neutral-600/30 rounded-lg"></div>
 
-                <div className="relative flex flex-col gap-10">
+                <div className="relative flex flex-col gap-4">
                     <div className="ml-5 text-3xl font-bold text-center sm:text-left text-red-300">
                         Advance
                     </div>

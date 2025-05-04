@@ -15,7 +15,8 @@ export interface PreConfig {
     difficulty: Difficulty;
 }
 
-const BashTerminal = forwardRef(({ preConfig, termSettings, terminalId }: { preConfig: PreConfig; termSettings: [number, number, boolean]; terminalId: string }, ref) => {
+const BashTerminal = forwardRef(({ preConfig, termSettings, terminalId, onOutput }:
+    { preConfig: PreConfig; termSettings: [number, number, boolean]; terminalId: string; onOutput?: (output: boolean) => void }, ref) => {
     const containerName = `bashherotest-${preConfig.id}`;
     const socketRef = useRef<WebSocket | null>(null);
 
@@ -36,12 +37,31 @@ const BashTerminal = forwardRef(({ preConfig, termSettings, terminalId }: { preC
             // Establish WebSocket connection
             // wss://bashheroserver.online
             // ws://localhost:8080
-            const socket = new WebSocket(`wss://bashheroserver.online?containerName=${encodeURIComponent(containerName)}`);
+            const socket = new WebSocket(`ws://localhost:8080?containerName=${encodeURIComponent(containerName)}`);
             socketRef.current = socket;
 
             // Handle incoming data from the WebSocket server
             socket.onmessage = (event) => {
-                term.write(event.data);
+                const data = event.data;
+                term.write(data);
+
+                // Checks to see if all test casses passed 
+                if (onOutput) {
+                    const numOfTestCases = preConfig.testCasesResults.length;
+                    var numOfPassedTestCases = 0;
+                    // Check if the output contains the expected results
+                    for (let i = 0; i < numOfTestCases; i++) {
+                        if (data.includes(preConfig.testCasesResults[i])) {
+                            numOfPassedTestCases++;
+                        }
+                    }
+                    if (numOfPassedTestCases == numOfTestCases) {
+                        onOutput(true);
+                    }
+                    else {
+                        onOutput(false);
+                    }
+                }
             };
 
             // Handle terminal input and send it to the WebSocket server
@@ -55,6 +75,8 @@ const BashTerminal = forwardRef(({ preConfig, termSettings, terminalId }: { preC
                         console.log("Command not allowed:", lastLine);
                     }
                 }
+
+                // Only allows input in the main terminal
                 if (terminalId == "terminal-bashing") {
                     socket.send(data);
                 }
