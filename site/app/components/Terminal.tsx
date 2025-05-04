@@ -16,7 +16,19 @@ export interface PreConfig {
 }
 
 const BashTerminal = forwardRef(({ preConfig, termSettings, terminalId }: { preConfig: PreConfig; termSettings: [number, number, boolean]; terminalId: string }, ref) => {
-    const containerName = `bashherotest-${preConfig.id}`;
+    const getOrCreateUniqueKey = () => {
+        const storageKey = `problem-${preConfig.id}-key`;
+        let uniqueKey = localStorage.getItem(storageKey);
+        
+        if (!uniqueKey) {
+            uniqueKey = Math.random().toString(36).substring(2, 15);
+            localStorage.setItem(storageKey, uniqueKey);
+        }
+        
+        return uniqueKey;
+    };
+
+    const containerName = `bashherotest-${preConfig.id}-${getOrCreateUniqueKey()}`;
     const socketRef = useRef<WebSocket | null>(null);
 
     useEffect(() => {
