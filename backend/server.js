@@ -14,7 +14,8 @@ wss.on("connection", (ws, req) => {
 
   // Extract the container name from the WebSocket URL
   const query = url.parse(req.url, true).query;
-  const containerName = query.containerName || "default_container"; // Default if not provided
+  const rawName = query.containerName || "default_container"; // Default if not provided
+  const containerName = rawName.replace(/[^a-zA-Z0-9-_]/g, '');
   console.log(`Using container name: ${containerName}`);
 
   let shell;
