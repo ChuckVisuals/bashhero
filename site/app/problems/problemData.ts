@@ -19,7 +19,7 @@ export interface PreConfig {
 export const problems: PreConfig[] = [
     {
         id: "welcome",
-        name: "🧠 BashHero Challenge: Secret Agent: Hidden Message",
+        name: "🧠 Hidden Message",
         PreProccessCmds: [
             "mkdir test",
             "cd test",
@@ -101,7 +101,7 @@ export const problems: PreConfig[] = [
     },
     {
         id: "file-cleanup",
-        name: "🧹 BashHero Challenge: File Cleanup",
+        name: "🧹 File Cleanup",
         PreProccessCmds: [
             "mkdir cleanup",
             "cd cleanup",
@@ -158,5 +158,5 @@ export const problems: PreConfig[] = [
         tags: ["bash", "file-management"],
         difficulty: Difficulty.Beginner
     }
-    
+
 ];
