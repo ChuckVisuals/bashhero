@@ -28,13 +28,13 @@ export default function Home() {
 
 
 
-
       {/* Hero Section */}
-      <div className="flex flex-col items-center py-40">
+      <div className="flex flex-col items-center py-40 overflow-clip relative">
+        <div className="bg-grid-dots rounded-full w-[50rem] h-[50rem] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 [mask-image:radial-gradient(red,transparent_80%)]" />
         <div className="flex sm:flex-row flex-col items-center justify-center bg-neutral-900 px-6 py-1">
-          <div className="flex flex-col items-center justify-center text-left px-6 ">
+          <div className="flex flex-col justify-center text-left px-6 ">
             <h1 className="text-5xl md:text-6xl font-bold mb-6">BashHero</h1>
-            <p className="text-lg md:text-xl text-gray-300 max-w-2xl mb-8">
+            <p className="text-lg md:text-xl text-gray-300 max-w-2xl mb-8 z-20">
               Master the command line like a hero. Simplify your terminal workflow with smart suggestions, scripts, and real-time feedback.
             </p>
           </div>
@@ -43,18 +43,19 @@ export default function Home() {
             alt="code"
             width={300}
             height={300}
+            className='z-20'
           />
 
         </div>
-        <Link href="/problems" className="flex px-8 py-3 h-15 w-60 border border-neutral-600/60 bg-neutral-800 hover:bg-neutral-700 rounded-4xl transition text-xl font-semibold items-center justify-center text-center duration-300 mt-8">
+        <Link href="/problems" className="z-20 flex px-8 py-3 h-15 w-60 border border-neutral-600/60 bg-neutral-800 hover:bg-neutral-700 rounded-4xl transition text-xl font-semibold items-center justify-center text-center duration-300 mt-8">
+          Get Started
           <Image
             src="/start.svg"
             alt="start"
             width={30}
             height={30}
-            className='invert mr-5'
+            className='invert ml-5 scale-x-[-1]'
           />
-          Get Started
         </Link>
       </div>
 

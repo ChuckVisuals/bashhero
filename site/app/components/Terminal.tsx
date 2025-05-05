@@ -37,7 +37,7 @@ const BashTerminal = forwardRef(({ preConfig, termSettings, terminalId, onOutput
             // Establish WebSocket connection
             // wss://bashheroserver.online
             // ws://localhost:8080
-            const socket = new WebSocket(`ws://localhost:8080?containerName=${encodeURIComponent(containerName)}`);
+            const socket = new WebSocket(`wss://bashheroserver.online?containerName=${encodeURIComponent(containerName)}`);
             socketRef.current = socket;
 
             // Handle incoming data from the WebSocket server
