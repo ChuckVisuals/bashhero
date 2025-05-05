@@ -18,8 +18,25 @@ export interface PreConfig {
 
 export const problems: PreConfig[] = [
     {
+        id: "demo",
+        name: "",
+        PreProccessCmds: [
+            "mkdir test",
+            "cd test",
+            "touch hello.txt",
+            "cd ..",
+            "clear"
+        ],
+        testCases: [],
+        testCasesResults: [],
+        restrictedCommands: ["shutdown", "reboot"],
+        description: ``,
+        tags: ["bash", "grep", "find"],
+        difficulty: Difficulty.Intermediate
+    },
+    {
         id: "welcome",
-        name: "🧠 BashHero Challenge: Secret Agent: Hidden Message",
+        name: "🧠 Hidden Message",
         PreProccessCmds: [
             "mkdir test",
             "cd test",
@@ -101,17 +118,19 @@ export const problems: PreConfig[] = [
     },
     {
         id: "file-cleanup",
-        name: "🧹 BashHero Challenge: File Cleanup",
+        name: "🧹 File Cleanup",
         PreProccessCmds: [
+            "rm -rf /workspace/cleanup",
             "mkdir cleanup",
             "cd cleanup",
             "touch file1.txt file2.log file3.tmp",
             "mkdir logs",
+            "cd ..",
             "clear"
         ],
         testCases: [
             "if [ ! -f /workspace/cleanup/file3.tmp ]; then echo '✅ .tmp files are deleted'; else echo '❌ .tmp files are still present'; fi > /workspace/cleanup/test_output.txt",
-            "if [ -f /workspace/cleanup/logs/file2.log ]; then echo '✅ .log files are moved to logs/'; else echo '❌ .log files are not in logs/'; fi >> /workspace/cleanup/test_output.txt",
+            "if [ -f /workspace/cleanup/logs/file2.log ] &&  [ ! -f /workspace/cleanup/file2.log ]; then echo '✅ .log files are moved to logs/'; else echo '❌ .log files are not in logs/'; fi >> /workspace/cleanup/test_output.txt",
             "clear",
             "cat /workspace/cleanup/test_output.txt"
         ],
@@ -158,5 +177,5 @@ export const problems: PreConfig[] = [
         tags: ["bash", "file-management"],
         difficulty: Difficulty.Beginner
     }
-    
+
 ];
