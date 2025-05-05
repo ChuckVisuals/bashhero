@@ -1,8 +1,34 @@
 import Link from 'next/link'
+import Image from 'next/image'
+import Terminal from '@/components/Terminal'
+import { problems } from "@/problems/problemData";
 
 export default function Home() {
   return (
     <main className="bg-neutral-900 text-white max-h-screen">
+
+      {/* Taskbar */}
+      <div className="w-full h-16 border-b-2 border-neutral-600/40 bg-neutral-900 p-3.5">
+        <div className="flex flex-row text-white">
+          <Link href="/" className="flex flex-row text-2xl font-bold items-center ml-6 cursor-pointer">
+            <Image
+              src="/logo.svg"
+              alt="BashHero Logo"
+              width={40}
+              height={40}
+              className="h-10 w-10 mr-2 mb-0.5">
+            </Image>
+            BashHero
+          </Link>
+          <Link href="/problems" className="ml-15 flex flex-row items-center text-lg hover:text-neutral-300 cursor-pointer duration-300">
+            Problems
+          </Link>
+        </div>
+      </div>
+
+
+
+
       {/* Hero Section */}
       <section className="flex flex-col items-center justify-center text-center px-6 py-46">
         <h1 className="text-5xl md:text-6xl font-bold mb-6">BashHero</h1>
@@ -16,24 +42,34 @@ export default function Home() {
 
       {/* Features Section */}
       <section id="features" className="bg-neutral-800 px-6 py-20">
-        <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-3xl font-semibold mb-12">Features</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-            <div className="bg-neutral-700 p-6 rounded-xl">
-              <h3 className="text-xl font-bold mb-2">Tracking Progress</h3>
-              <p className="text-gray-300">Track the progress between you and your friends.</p>
+        <div className="flex flex-col items-center">
+
+          <h2 className="text-3xl font-semibold mb-12 text-center">Features</h2>
+
+          <div className="flex flex-col gap-8 mb-12 justify-center items-center w-270">
+            <div className="flex flex-row gap-8 text-left">
+              <div className="p-6 rounded-xl border border-neutral-600/60">
+                <h3 className="text-lg font-bold mb-2">Tracking Progress</h3>
+                <p className="text-gray-300">Track the progress between you and your friends.</p>
+              </div>
+              <div className="p-6 rounded-xl border border-neutral-600/60">
+                <h3 className="text-lg font-bold mb-2">One-Click Scripts</h3>
+                <p className="text-gray-300">Save and run bash tasks from a sleek web interface.</p>
+              </div>
+              <div className="p-6 rounded-xl border border-neutral-600/60">
+                <h3 className="text-lg font-bold mb-2">Live Feedback</h3>
+                <p className="text-gray-300">Real-time terminal output using WebSocket integration.</p>
+              </div>
             </div>
-            <div className="bg-neutral-700 p-6 rounded-xl">
-              <h3 className="text-xl font-bold mb-2">One-Click Scripts</h3>
-              <p className="text-gray-300">Save and run bash tasks from a sleek web interface.</p>
-            </div>
-            <div className="bg-neutral-700 p-6 rounded-xl">
-              <h3 className="text-xl font-bold mb-2">Live Feedback</h3>
-              <p className="text-gray-300">Real-time terminal output using WebSocket integration.</p>
+
+            <div className="border border-neutral-600/60 rounded-lg p-2 overflow-hidden h-120 w-270">
+              <Terminal preConfig={problems[0]} termSettings={[100, 100, false]} terminalId="terminal-bashing" />
             </div>
           </div>
         </div>
       </section>
+
+
 
       {/* Footer */}
       <footer className="text-center py-2 border-t border-gray-700 bg-neutral-900 h-10">

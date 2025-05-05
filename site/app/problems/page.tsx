@@ -52,7 +52,7 @@ export default function ProblemsPage() {
                         {/* Scrollable row */}
                         <div className="flex flex-row ml-10 gap-4 items-center overflow-x-auto scrollbar-hide">
                             {problems
-                                .filter((problem) => problem.difficulty === Difficulty.Intermediate)
+                                .filter((problem) => problem.difficulty === Difficulty.Intermediate && problem.id !== "demo")
                                 .map((problem, index) => (
                                     <ProblemBtn
                                         key={index}

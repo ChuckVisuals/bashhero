@@ -18,6 +18,23 @@ export interface PreConfig {
 
 export const problems: PreConfig[] = [
     {
+        id: "demo",
+        name: "",
+        PreProccessCmds: [
+            "mkdir test",
+            "cd test",
+            "touch hello.txt",
+            "cd ..",
+            "clear"
+        ],
+        testCases: [],
+        testCasesResults: [],
+        restrictedCommands: ["shutdown", "reboot"],
+        description: ``,
+        tags: ["bash", "grep", "find"],
+        difficulty: Difficulty.Intermediate
+    },
+    {
         id: "welcome",
         name: "🧠 Hidden Message",
         PreProccessCmds: [
