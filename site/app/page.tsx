@@ -14,8 +14,8 @@ export default function Home() {
             <Image
               src="/logo.svg"
               alt="BashHero Logo"
-              width={40}
-              height={40}
+              width={30}
+              height={30}
               className="h-10 w-10 mr-2 mb-0.5">
             </Image>
             BashHero
@@ -30,15 +30,34 @@ export default function Home() {
 
 
       {/* Hero Section */}
-      <section className="flex flex-col items-center justify-center text-center px-6 py-46">
-        <h1 className="text-5xl md:text-6xl font-bold mb-6">BashHero</h1>
-        <p className="text-lg md:text-xl text-gray-300 max-w-2xl mb-8">
-          Master the command line like a hero. Simplify your terminal workflow with smart suggestions, scripts, and real-time feedback.
-        </p>
-        <Link href="/problems" className="px-8 py-3 bg-neutral-600 hover:bg-neutral-700 rounded-xl transition">
+      <div className="flex flex-col items-center py-40">
+        <div className="flex sm:flex-row flex-col items-center justify-center bg-neutral-900 px-6 py-1">
+          <div className="flex flex-col items-center justify-center text-left px-6 ">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">BashHero</h1>
+            <p className="text-lg md:text-xl text-gray-300 max-w-2xl mb-8">
+              Master the command line like a hero. Simplify your terminal workflow with smart suggestions, scripts, and real-time feedback.
+            </p>
+          </div>
+          <Image
+            src="/code.svg"
+            alt="code"
+            width={300}
+            height={300}
+          />
+
+        </div>
+        <Link href="/problems" className="flex px-8 py-3 h-15 w-60 border border-neutral-600/60 bg-neutral-800 hover:bg-neutral-700 rounded-4xl transition text-xl font-semibold items-center justify-center text-center duration-300 mt-8">
+          <Image
+            src="/start.svg"
+            alt="start"
+            width={30}
+            height={30}
+            className='invert mr-5'
+          />
           Get Started
         </Link>
-      </section>
+      </div>
+
 
       {/* Features Section */}
       <section id="features" className="bg-neutral-800 px-6 py-20">
@@ -49,15 +68,43 @@ export default function Home() {
           <div className="flex flex-col gap-8 mb-12 justify-center items-center w-270">
             <div className="flex flex-row gap-8 text-left">
               <div className="p-6 rounded-xl border border-neutral-600/60">
-                <h3 className="text-lg font-bold mb-2">Tracking Progress</h3>
+                <div className="flex flex-row items-center">
+                  <Image
+                    src="/tracking.svg"
+                    alt="tracking"
+                    width={30}
+                    height={30}
+                    className='invert mr-2 mb-1'
+                  />
+                  <h3 className="text-lg font-bold mb-2">Tracking Progress</h3>
+                </div>
+
                 <p className="text-gray-300">Track the progress between you and your friends.</p>
               </div>
               <div className="p-6 rounded-xl border border-neutral-600/60">
-                <h3 className="text-lg font-bold mb-2">One-Click Scripts</h3>
+                <div className="flex flex-row items-center">
+                  <Image
+                    src="/click.svg"
+                    alt="click"
+                    width={30}
+                    height={30}
+                    className='invert mr-2 mb-1.5'
+                  />
+                  <h3 className="text-lg font-bold mb-2">One-Click Scripts</h3>
+                </div>
                 <p className="text-gray-300">Save and run bash tasks from a sleek web interface.</p>
               </div>
               <div className="p-6 rounded-xl border border-neutral-600/60">
-                <h3 className="text-lg font-bold mb-2">Live Feedback</h3>
+                <div className="flex flex-row items-center">
+                  <Image
+                    src="/live.svg"
+                    alt="live"
+                    width={30}
+                    height={30}
+                    className='invert mr-2 mb-2'
+                  />
+                  <h3 className="text-lg font-bold mb-2">Live Feedback</h3>
+                </div>
                 <p className="text-gray-300">Real-time terminal output using WebSocket integration.</p>
               </div>
             </div>
