@@ -111,7 +111,7 @@ export default function Home() {
             </div>
 
             <div className="border border-neutral-600/60 rounded-lg p-2 overflow-hidden h-120 w-270">
-              <Terminal preConfig={problems[0]} termSettings={[100, 100, true]} terminalId="terminal-bashing" uniqueKey=":3" />
+              <Terminal preConfig={problems[0]} termSettings={[100, 100, true]} terminalId="terminal-bashing" uniqueKey="main" />
             </div>
           </div>
         </div>
