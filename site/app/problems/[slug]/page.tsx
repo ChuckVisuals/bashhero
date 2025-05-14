@@ -10,7 +10,7 @@ import { useRef, useState, useEffect } from "react";
 
 const ProblemPage = () => {
     const { slug } = useParams();
-    const terminalRef = useRef<{ runCommands: (commands: string[]) => void } | null>(null);
+    const terminalRef = useRef<{ runCommands: (commands: string[]) => void; checkTest: () => string } | null>(null);
     const [PassFail, setPassFail] = useState<boolean>(false);
     const [localStorageKey, setLocalStorageKey] = useState<string>("");
 
@@ -71,10 +71,22 @@ const ProblemPage = () => {
         );
     }
 
-    // Function to handle running tests
+    // Function to handle running tests and checking results
     const handleRunTests = () => {
         if (terminalRef.current) {
             terminalRef.current.runCommands(problem.testCases);
+
+            //checking test results
+            setTimeout(() => {
+                const testOutput = terminalRef.current?.checkTest();
+                console.log("Test Output:", testOutput);
+            }, 1000);
+        }
+    };
+    // Function to handle checking test results
+    const handleCheckTest = () => {
+        if (terminalRef.current) {
+
         }
     };
 
@@ -111,36 +123,39 @@ const ProblemPage = () => {
             <div className="flex flex-col justify-between bg-neutral-900 border border-neutral-600 rounded-lg p-4 mx-4 h-1/3">
                 <div className="flex flex-row items-center">
                     <div className="text-2xl text-white">Test/Cases</div>
-                    <button className="ml-auto border border-neutral-600 bg-neutral-800 text-white rounded-lg px-4 py-2 hover:bg-neutral-700 hover:cursor-pointer duration-800" onClick={handleRunTests}>
+                    <button className="ml-auto border border-neutral-600 bg-neutral-800 text-white rounded-lg px-4 py-2 hover:bg-neutral-700 hover:cursor-pointer duration-800"
+                        onClick={handleRunTests}>
                         Run Tests
                     </button>
                 </div>
                 <BashTerminal ref={terminalRef} preConfig={problem} termSettings={[term2Height, term2Width, false]} terminalId="terminal-testing" onOutput={setPassFail} uniqueKey={localStorageKey} />
             </div>
 
-            {PassFail && (
-                <div className="flex items-center justify-center h-screen w-screen fixed top-0 left-0 place-items-center backdrop-blur-sm bg-black/20 z-20">
-                    <div className=" bg-neutral-900 border border-neutral-600/50 rounded-3xl p-8">
-                        <div className="flex flex-row gap-x-5 items-center justify-center">
-                            <Image src="/checkmark.svg" alt="check" width={150} height={150} className='invert opacity-70'></Image>
-                            <div className="text-6xl text-white/70">
-                                All test cases passed!
+            {
+                PassFail && (
+                    <div className="flex items-center justify-center h-screen w-screen fixed top-0 left-0 place-items-center backdrop-blur-sm bg-black/20 z-20">
+                        <div className=" bg-neutral-900 border border-neutral-600/50 rounded-3xl p-8">
+                            <div className="flex flex-row gap-x-5 items-center justify-center">
+                                <Image src="/checkmark.svg" alt="check" width={150} height={150} className='invert opacity-70'></Image>
+                                <div className="text-6xl text-white/70">
+                                    All test cases passed!
+                                </div>
+                            </div>
+                            <div className="flex flex-row gap-x-5 items-center justify-center mt-5">
+                                <Link href="/problems" className="flex flex-row  items-center gap-x-4 text-xl border border-neutral-600 bg-neutral-800 text-white rounded-lg px-4 py-2 hover:bg-neutral-700 hover:cursor-pointer duration-800" onClick={() => { }}>
+                                    <Image src="/map.svg" alt="check" width={50} height={50} className='invert opacity-70'></Image>
+                                    Explore More Problems
+                                </Link>
+                                <a href={`/problems/${slug}`} className="flex flex-row  items-center gap-x-4 text-xl border border-neutral-600 bg-neutral-800 text-white rounded-lg px-4 py-2 hover:bg-neutral-700 hover:cursor-pointer duration-800" onClick={() => { }}>
+                                    <Image src="/restart.svg" alt="check" width={50} height={50} className='invert text-white opacity-70'></Image>
+                                    Restart
+                                </a>
                             </div>
                         </div>
-                        <div className="flex flex-row gap-x-5 items-center justify-center mt-5">
-                            <Link href="/problems" className="flex flex-row  items-center gap-x-4 text-xl border border-neutral-600 bg-neutral-800 text-white rounded-lg px-4 py-2 hover:bg-neutral-700 hover:cursor-pointer duration-800" onClick={() => { }}>
-                                <Image src="/map.svg" alt="check" width={50} height={50} className='invert opacity-70'></Image>
-                                Explore More Problems
-                            </Link>
-                            <a href={`/problems/${slug}`} className="flex flex-row  items-center gap-x-4 text-xl border border-neutral-600 bg-neutral-800 text-white rounded-lg px-4 py-2 hover:bg-neutral-700 hover:cursor-pointer duration-800" onClick={() => { }}>
-                                <Image src="/restart.svg" alt="check" width={50} height={50} className='invert text-white opacity-70'></Image>
-                                Restart
-                            </a>
-                        </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )
+            }
+        </div >
 
     )
 };
