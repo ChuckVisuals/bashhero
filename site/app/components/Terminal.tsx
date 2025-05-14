@@ -15,12 +15,19 @@ export interface PreConfig {
     difficulty: Difficulty;
 }
 
-const BashTerminal = forwardRef(({ preConfig, termSettings, terminalId, onOutput }:
-    { preConfig: PreConfig; termSettings: [number, number, boolean]; terminalId: string; onOutput?: (output: boolean) => void }, ref) => {
-    const containerName = `bashherotest-${preConfig.id}`;
+const BashTerminal = forwardRef(({ preConfig, termSettings, terminalId, onOutput, uniqueKey }:
+    { preConfig: PreConfig; termSettings: [number, number, boolean]; terminalId: string; onOutput?: (output: boolean) => void; uniqueKey: string }, ref) => {
+    //const containerName = `bashherotest-${preConfig.id}`;
     const socketRef = useRef<WebSocket | null>(null);
 
+
+
+
+    const containerName = `bashherotest-${preConfig.id}-${uniqueKey}`;
+    console.log("Container name:", containerName);
+
     const [termInstance, setTermInstance] = useState<Terminal>(new Terminal({})); // State to store the terminal instance
+
 
     useEffect(() => {
         const term = new Terminal({
