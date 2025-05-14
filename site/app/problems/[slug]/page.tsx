@@ -12,6 +12,7 @@ const ProblemPage = () => {
     const { slug } = useParams();
     const terminalRef = useRef<{ runCommands: (commands: string[]) => void } | null>(null);
     const [PassFail, setPassFail] = useState<boolean>(false);
+    const [localStorageKey, setLocalStorageKey] = useState<string>("");
 
     console.log("PassFail:", PassFail);
 
@@ -39,7 +40,24 @@ const ProblemPage = () => {
         };
     }, []);
 
-    //console.log("Window size:", windowSize);
+
+    // Effect to generate a unique key for local storage and check if it exists
+    // This effect runs only once when the component mounts
+    // and sets the initial value of PassFail based on local storage
+    useEffect(() => {
+        // Generate a unique key for local storage based on the problem ID
+        const generatedKey = Math.random().toString(36).substring(2, 15)
+
+        // Check if the key exists in local storage
+        const storedValue = localStorage.getItem("key");
+        if (!storedValue) {
+            localStorage.setItem("key", generatedKey);
+            setLocalStorageKey(generatedKey);
+        } else {
+            setLocalStorageKey(storedValue);
+        }
+    }, []);
+
 
     // Find the problem by slug
     const problem = problems.find((p) => p.id === slug);
@@ -85,7 +103,7 @@ const ProblemPage = () => {
                 <div className="w-1/2 flex flex-col gap-4 justify-center">
                     <h1 className="text-2xl text-white">Bash Hero</h1>
                     <div className="border border-neutral-600 rounded-lg p-1">
-                        <BashTerminal preConfig={problem} termSettings={[term1Height, term1Width, true]} terminalId="terminal-bashing" />
+                        <BashTerminal preConfig={problem} termSettings={[term1Height, term1Width, true]} terminalId="terminal-bashing" uniqueKey={localStorageKey} />
                     </div>
 
                 </div>
@@ -97,7 +115,7 @@ const ProblemPage = () => {
                         Run Tests
                     </button>
                 </div>
-                <BashTerminal ref={terminalRef} preConfig={problem} termSettings={[term2Height, term2Width, false]} terminalId="terminal-testing" onOutput={setPassFail} />
+                <BashTerminal ref={terminalRef} preConfig={problem} termSettings={[term2Height, term2Width, false]} terminalId="terminal-testing" onOutput={setPassFail} uniqueKey={localStorageKey} />
             </div>
 
             {PassFail && (
