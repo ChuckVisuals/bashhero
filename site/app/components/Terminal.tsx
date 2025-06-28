@@ -177,7 +177,7 @@ const BashTerminal = forwardRef(({ preConfig, termSettings, terminalId, onOutput
         }
     }
 
-    return (<div id={terminalId} className=""></div>);
+    return (<div id={terminalId} className="no-xterm-scrollbar"></div>);
 });
 
 export default BashTerminal;

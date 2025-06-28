@@ -108,13 +108,13 @@ const ProblemPage = () => {
             <div className="flex flex-row gap-x-20 bg-neutral-900 border border-neutral-600 rounded-lg p-4 mx-4 justify-between h-2/3">
                 <div className="w-1/2 overflow-hidden">
                     <h1 className="text-2xl text-white">{problem.name}</h1>
-                    <div className="prose prose-stone prose max-w-5xl prose-invert p-8 mt-4 border border-neutral-600 rounded-lg bg-neutral-800 max-h-9/10 overflow-y-auto">
+                    <div className="prose prose-stone max-w-5xl prose-invert p-8 mt-4 border border-neutral-600 rounded-lg bg-neutral-800 max-h-9/10 overflow-y-auto scrollbar-hide shadow-lg">
                         <ReactMarkdown>{dedent(problem.description)}</ReactMarkdown>
                     </div>
                 </div>
                 <div className="w-1/2 flex flex-col gap-4 justify-center">
                     <h1 className="text-2xl text-white">Bash Hero</h1>
-                    <div className="border border-neutral-600 rounded-lg p-1">
+                    <div className="border border-neutral-600 rounded-lg p-4 bg-neutral-800 shadow-lg">
                         <BashTerminal preConfig={problem} termSettings={[term1Height, term1Width, true]} terminalId="terminal-bashing" uniqueKey={localStorageKey} />
                     </div>
 
