@@ -13,6 +13,7 @@ const ProblemPage = () => {
     const terminalRef = useRef<{ runCommands: (commands: string[]) => void; checkTest: () => string } | null>(null);
     const [PassFail, setPassFail] = useState<boolean>(false);
     const [localStorageKey, setLocalStorageKey] = useState<string>("");
+    const [userInput, setUserInput] = useState<string>("");
 
     console.log("PassFail:", PassFail);
 
@@ -84,10 +85,20 @@ const ProblemPage = () => {
         }
     };
     // Function to handle checking test results
-    const handleCheckTest = () => {
-        if (terminalRef.current) {
+    const handleRunTestsv2 = () => {
 
+        const answer = problem.testCases;
+
+        console.log("CHECKING", answer);
+
+        //checking test results
+        if (answer.includes(userInput)) {
+            setPassFail(true);
+        } else {
+            console.log("Incorrect answer. Please try again.");
         }
+
+
     };
 
     // Wait until windowSize is updated with real dimensions
@@ -104,8 +115,8 @@ const ProblemPage = () => {
 
     // If the problem is found, render its details with terminals
     return (
-        <div className="h-screen flex flex-col gap-4 mt-20">
-            <div className="flex flex-row gap-x-20 bg-neutral-900 border border-neutral-600 rounded-lg p-4 mx-4 justify-between h-2/3">
+        <div className="h-screen flex flex-col gap-4 pt-20">
+            <div className="flex flex-row gap-x-20 bg-neutral-900 border border-neutral-600 rounded-lg p-4 mx-4 justify-between h-4/5">
                 <div className="w-1/2 overflow-hidden">
                     <h1 className="text-2xl text-white">{problem.name}</h1>
                     <div className="prose prose-stone max-w-5xl prose-invert p-8 mt-4 border border-neutral-600 rounded-lg bg-neutral-800 max-h-9/10 overflow-y-auto scrollbar-hide shadow-lg">
@@ -120,7 +131,7 @@ const ProblemPage = () => {
 
                 </div>
             </div>
-            <div className="flex flex-col justify-between bg-neutral-900 border border-neutral-600 rounded-lg p-4 mx-4 h-1/3">
+            {/* <div className="flex flex-col justify-between bg-neutral-900 border border-neutral-600 rounded-lg p-4 mx-4 h-1/3">
                 <div className="flex flex-row items-center">
                     <div className="text-2xl text-white">Test/Cases</div>
                     <button className="ml-auto border border-neutral-600 bg-neutral-800 text-white rounded-lg px-4 py-2 hover:bg-neutral-700 hover:cursor-pointer duration-800"
@@ -129,6 +140,24 @@ const ProblemPage = () => {
                     </button>
                 </div>
                 <BashTerminal ref={terminalRef} preConfig={problem} termSettings={[term2Height, term2Width, false]} terminalId="terminal-testing" onOutput={setPassFail} uniqueKey={localStorageKey} />
+            </div> */}
+            <div className="flex flex-col space-y-6 bg-neutral-900 border border-neutral-600 rounded-lg p-4 mx-4 mb-4 h-1/5">
+                <div className="flex flex-row items-center">
+                    <div className="text-2xl text-white">Test/Cases</div>
+                    <button className="ml-auto border border-neutral-600 bg-neutral-800 text-white rounded-lg px-4 py-2 hover:bg-neutral-700 hover:cursor-pointer duration-800"
+                        onClick={handleRunTestsv2}>
+                        Check Answer
+                    </button>
+                </div>
+                <label htmlFor="userInput" className="block text-white mb-2">Your Answer:</label>
+                <input
+                    id="userInput"
+                    type="text"
+                    value={userInput}
+                    onChange={e => setUserInput(e.target.value)}
+                    className="w-full p-2 rounded-lg border border-neutral-600 bg-neutral-700 text-white"
+                    placeholder="Type your answer here..."
+                />
             </div>
 
             {
